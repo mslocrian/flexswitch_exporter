@@ -23,11 +23,11 @@ func LoadFile(filename string) (*Config, error) {
 
 var (
 	DefaultModule = Module{
-		Port: 8080,
+		Port:  8080,
 		Proto: "http",
 	}
 	DefaultAuth = Auth{
-		Username:     "",
+		Username: "",
 		Password: "",
 	}
 )
@@ -35,9 +35,9 @@ var (
 type Config map[string]*Module
 
 type Module struct {
-	Port int `yaml:"port"`
+	Port  int    `yaml:"port"`
 	Proto string `yaml:"proto"`
-	Auth    *Auth `yaml:"auth"`
+	Auth  *Auth  `yaml:"auth"`
 
 	XXX map[string]interface{} `yaml:",inline"`
 }
@@ -59,8 +59,8 @@ func (c *Module) UnmarshalYAML(unmarshal func(interface{}) error) error {
 }
 
 type Auth struct {
-	Username      string `yaml:"username,omitempty"`
-	Password      string `yaml:"password,omitempty"`
+	Username string `yaml:"username,omitempty"`
+	Password string `yaml:"password,omitempty"`
 
 	XXX map[string]interface{} `yaml:",inline"`
 }

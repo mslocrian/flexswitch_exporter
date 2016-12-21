@@ -23,7 +23,7 @@ import (
 	"sync"
 	"time"
 
-	"./collector"
+	"github.com/mslocrian/flexswitch_exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
@@ -57,13 +57,13 @@ var (
 	configFile = flag.String("config.file", "flexswitch.yml",
 		"Path to configuration file",
 	)
-	showVersion       = flag.Bool("version", false, "Print version information.")
-	listenAddress     = flag.String("web.listen-address", ":9117", "Address on which to expose metrics and web interface.")
+	showVersion   = flag.Bool("version", false, "Print version information.")
+	listenAddress = flag.String("web.listen-address", ":9117", "Address on which to expose metrics and web interface.")
 )
 
 // NodeCollector implements the prometheus.Collector interface.
 type NodeCollector struct {
-	collectors map[string]collector.Collector
+	collectors      map[string]collector.Collector
 	collectorParams collector.FlexSwitchParams
 }
 
@@ -168,14 +168,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Debug("Scraping target '%s' with module '%s'", target, moduleName)
 
-        fsp := collector.FlexSwitchParams{Target: target,
-					  Proto: module.Proto,
-					  Port: module.Port,
-					  Username: module.Auth.Username,
-					  Password: module.Auth.Password}
+	fsp := collector.FlexSwitchParams{Target: target,
+		Proto:    module.Proto,
+		Port:     module.Port,
+		Username: module.Auth.Username,
+		Password: module.Auth.Password}
 
 	nodeCollector := NodeCollector{collectors: collectors,
-					collectorParams: fsp}
+		collectorParams: fsp}
 
 	registry := prometheus.NewRegistry()
 	registry.MustRegister(nodeCollector)
@@ -200,8 +200,7 @@ func main() {
 	log.Infoln("Starting flexswitch_exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
 
-
-        http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/flexswitch", handler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>

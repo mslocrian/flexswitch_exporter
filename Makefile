@@ -21,7 +21,8 @@ DOCKER_IMAGE_NAME       ?= node-exporter
 DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 
 
-all: format build test
+#all: format build test
+all: format build
 
 style:
 	@echo ">> checking code style"

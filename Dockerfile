@@ -1,7 +1,7 @@
 FROM        quay.io/prometheus/busybox:latest
 MAINTAINER  The Prometheus Authors <prometheus-developers@googlegroups.com>
 
-COPY node_exporter /bin/node_exporter
+COPY flexswitch_exporter /bin/flexswitch_exporter
 
 EXPOSE      9100
-ENTRYPOINT  [ "/bin/node_exporter" ]
+ENTRYPOINT  [ "/bin/flexswitch_exporter" ]

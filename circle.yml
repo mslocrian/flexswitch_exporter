@@ -1,9 +1,9 @@
 machine:
   environment:
-    DOCKER_IMAGE_NAME: prom/node-exporter
-    QUAY_IMAGE_NAME: quay.io/prometheus/node-exporter
+    DOCKER_IMAGE_NAME: prom/flexswitch-exporter
+    QUAY_IMAGE_NAME: quay.io/prometheus/flexswitch-exporter
     DOCKER_TEST_IMAGE_NAME: quay.io/prometheus/golang-builder:1.6-base
-    REPO_PATH: github.com/prometheus/node_exporter
+    REPO_PATH: github.com/mslocrian/flexswitch_exporter
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci'
     - sudo chmod 0755 /usr/bin/docker
@@ -17,7 +17,7 @@ dependencies:
     - docker info
   override:
     - promu crossbuild
-    - ln -s .build/linux-amd64/node_exporter node_exporter
+    - ln -s .build/linux-amd64/flexswitch_exporter flexswitch_exporter
     - |
       if [ -n "$CIRCLE_TAG" ]; then
         make docker DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME DOCKER_IMAGE_TAG=$CIRCLE_TAG

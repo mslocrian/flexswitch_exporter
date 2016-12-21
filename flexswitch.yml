@@ -1,0 +1,12 @@
+---
+# Default module: interface stats and uptime.
+default:
+  port: 8080
+  proto: http
+
+authenticated:
+  port: 443
+  proto: https
+  auth:
+    username: foolio
+    password: slim

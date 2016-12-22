@@ -2,10 +2,7 @@ package collector
 
 import (
 	"encoding/json"
-	//"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strconv"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -103,23 +100,19 @@ func getFlexswitchNetDevStats(p FlexSwitchParams) (map[string]map[string]string,
 	flexswitchPortsUrl := p.Proto + "://" +
 		p.Target + ":" + strconv.Itoa(p.Port) +
 		"/public/v1/state/ports"
-	resp, err := http.Get(flexswitchPortsUrl)
+	resp, err := Get(flexswitchPortsUrl, p)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	//defer resp.Body.Close()
 
 	return parseFlexSwitchStats(resp)
 }
 
-func parseFlexSwitchStats(r *http.Response) (map[string]map[string]string, error) {
-	htmlBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return nil, fmt.Errorf("invalid http body output:", err)
-	}
-
+func parseFlexSwitchStats(body []byte) (map[string]map[string]string, error) {
 	var jsonBody FlexPortIndex
-	err = json.Unmarshal(htmlBody, &jsonBody)
+
+	err := json.Unmarshal(body, &jsonBody)
 	if err != nil {
 		return nil, fmt.Errorf("could not unmarshal json output:", err)
 	}
@@ -185,7 +178,7 @@ func (c *flexswitchStatsCollector) Update(p FlexSwitchParams, ch chan<- promethe
 			desc, ok := c.metricDescs[key]
 			if !ok {
 				desc = prometheus.NewDesc(
-					prometheus.BuildFQName(Namespace, c.subsystem, key),
+					prometheus.BuildFQName(Namespace, "", key),
 					fmt.Sprintf("flexswitch network device statistic %s.", key),
 					[]string{"device"},
 					nil,
